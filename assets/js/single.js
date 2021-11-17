@@ -1,5 +1,6 @@
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
+var repoNameEl = document.querySelector("#repo-name");
 
 var getRepoIssues = function(repo){
     var apiURL = "https://api.github.com/repos/" + repo + "/issues?direction=asc"; // Sort in ascending order
@@ -13,19 +14,14 @@ var getRepoIssues = function(repo){
             }
             return response.json(); // Return then call the then function again
         }else{
-            alert("Error: GitHub Repo Not Found");
+            document.location.replace("./index.html"); // redirect to main page
         }
 
     }).then(function(data){
-        
         // Create elements
         displayIssues(data);
-        
-
     }).catch(function(error){
-
-        alert("Unable to connect to Github")
-
+        document.location.replace("./index.html"); // redirect to main page
     });
 }
 
@@ -77,7 +73,20 @@ var displayWarning = function(repo){
     limitWarningEl.appendChild(linkEl);
 }
 
+var getRepoName = function(){
+    var queryString = document.location.search; // Query parameter
+    var repoName = queryString.split("=")[1]; // Get the second index in the split string
+    if(repoName) { // Check valid repo name, if not redirect to main page
+        repoNameEl.textContent = repoName;
+        getRepoIssues(repoName);
+    } else {
+        document.location.replace("./index.html"); // redirect to main page
+    }
+    
+}
+
+getRepoName();
 
 //getRepoIssues("facebook/react");
 //getRepoIssues("fchoi1/git-it-done");
-getRepoIssues("angular/angular");
+//getRepoIssues("angular/angular");

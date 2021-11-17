@@ -56,8 +56,9 @@ var displayRepos = function(repos, searchTerm){
         var repoName = r.owner.login + "/" + r.name;
 
         // Create a container element
-        var repoEl = document.createElement("div");
-        repoEl.className = "list-item flex-row justify-space-between align-center";
+        var repoEl = document.createElement("a");
+        repoEl.classList = "list-item flex-row justify-space-between align-center";
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName); // Relative path query parameters
 
         // Create span element
         var repoTitleEl = document.createElement("span");
@@ -65,7 +66,7 @@ var displayRepos = function(repos, searchTerm){
 
         // Create a status element
         var statusEl = document.createElement("span");
-        statusEl.className = "flex-row align-center";
+        statusEl.classList = "flex-row align-center";
 
         // Check if current repo has issues or not
         if (r.open_issues_count > 0){
@@ -86,5 +87,6 @@ var displayRepos = function(repos, searchTerm){
 // Form submit Listener
 userFormEl.addEventListener("submit", formSubmitHandler);
 
-getUserRepos("octocat");
-getUserRepos("fchoi1");
+//testing
+//getUserRepos("octocat");
+//getUserRepos("fchoi1");
