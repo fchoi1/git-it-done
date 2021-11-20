@@ -2,6 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonEl = document.querySelector("#language-buttons");
 
 var getUserRepos = function(user){
 
@@ -24,6 +25,20 @@ var getUserRepos = function(user){
     });
 }
 
+var getFeaturedRepos = function(language){
+    var apiUrl = "https://api.github.com/search/repositories?q="+language +"is:feature&sort=help-wanted-issues";
+    fetch(apiUrl).then(function(response){
+        if(response.ok){
+            return response.json();
+        } else {
+            alert("Error: Github User Not Found");
+        }
+
+    }).then(function(data){
+        displayRepos(data.items, language);
+    })
+}
+
 
 var formSubmitHandler = function(event){
     event.preventDefault();
@@ -33,16 +48,15 @@ var formSubmitHandler = function(event){
         getUserRepos(username);
         nameInputEl.value = "";
     } else {
-        alert("Please enter a Github Username");
+        alert("Please enter a Github Username");s
     }
     console.log(event);
 }
 
 
 var displayRepos = function(repos, searchTerm){
-
     // Clear old data from container and span
-    repoSearchTerm.textContent = "";
+    repoSearchTerm.textContent = searchTerm;
     repoContainerEl.textContent = "";
 
     // Check if user has any repos
@@ -84,9 +98,25 @@ var displayRepos = function(repos, searchTerm){
 
     }
 }
+
+var buttonClickHandler = function(event){
+    var language = event.target.getAttribute("data-language");
+    if(language){
+        getFeaturedRepos(language);
+        // clear old content
+        repoContainerEl.textContent = "";
+    }
+    console.log(language);
+
+}
+
 // Form submit Listener
 userFormEl.addEventListener("submit", formSubmitHandler);
 
+// Language Query Listner
+languageButtonEl.addEventListener("click", buttonClickHandler);
+
+//getFeaturedRepos("javascript")
 //testing
 //getUserRepos("octocat");
 //getUserRepos("fchoi1");
